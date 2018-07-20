@@ -1,90 +1,272 @@
-<!-- <!doctype html>
-<meta charset="utf-8">
-<title>Make a sprite from a texture atlas</title>
-<body>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Slot | pixi.js</title>
 <script src="js/pixi.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.7.1/pixi.min.js"></script>
+<script src="js/slot.js"></script>
+<script src="js/SlotIcon.js"></script>
+<script src="js/button.js"></script>
+
+<style type="text/css">
+	body {
+		margin: 0;
+		padding: 0;
+	}
+</style>
+
 <script>
-
-//Aliases
-let Application = PIXI.Application,
-    Container = PIXI.Container,
-    loader = PIXI.loader,
-    resources = PIXI.loader.resources,
-    TextureCache = PIXI.utils.TextureCache,
-    Sprite = PIXI.Sprite,
-    Rectangle = PIXI.Rectangle;
-
-//Create a Pixi Application
-let app = new Application({ 
-    width: 512, 
-    height: 512,                       
-    antialiasing: true, 
-    transparent: false, 
-    resolution: 1
-  }
-);
-
-//Add the canvas that Pixi automatically created for you to the HTML document
-document.body.appendChild(app.view);
-
-//load a JSON file and run the `setup` function when it's done
-loader
-  .add("images/dungeon.png")
-  .load(setup);
-
-//Define variables that might be used in more 
-//than one function
-let dungeon, explorer, treasure, door, id;
-
-function setup() {
-
-  //There are 3 ways to make sprites from textures atlas frames
-
-  //1. Access the `TextureCache` directly
-  let dungeonTexture = TextureCache["images/dungeon.png"];
-  dungeon = new Sprite(dungeonTexture);
-  app.stage.addChild(dungeon);
+var stage, renderer;
+var container, front;
+var loader;
+var bw = 100;
+var bh = 120;
+var max = 3;
+var slots;
+var speed = 8;
+var radius = 360;
+var playBtn, stopBtns;
+var timer;
+var completed = 0;
+var label;
+var list;
+var checked = 0;
 
 
-  //Make the exit door
+// How to add text object on the background image
+// Create the background Image
+
+//Add text as a child of the Sprite
+// var text = new PIXI.Text('my custom text',
+//     {
+//       font : '12px Arial',
+//       fill : 0x666666,
+//       align : 'center',
+//       cacheAsBitmap: true, // for better performance
+//       height: 57,
+//       width: 82
+//     });    
+// sprite.addChild(text);
+
+function init() {
+	stage = new PIXI.Container();
+	renderer = PIXI.autoDetectRenderer(640, 400, {backgroundColor: 0xFFFFFF});
+	document.body.appendChild(renderer.view);
+
+	renderer.view.style.width = "640px";
+	renderer.view.style.marginTop = "40px";
+	renderer.view.style.marginLeft = "auto";
+	renderer.view.style.marginRight = "auto";
+	renderer.view.style.paddingLeft = "0";
+	renderer.view.style.paddingRight = "0";
 
 
-  //Make the blobs
-  let numberOfBlobs = 6,
-      spacing = 48,
-      xOffset = 150;
+	// container
+	container = new PIXI.Container();
+	stage.addChild(container);
+	front = new PIXI.Container();
+	stage.addChild(front);
 
-  //Make as many blobs as there are `numberOfBlobs`
-  let a = TextureCache["images/sushi.png"];
-  for (let i = 0; i < numberOfBlobs; i++) {
 
-    //Make a blob
-    let blob = new Sprite(a);
+	background();
 
-    //Space each blob horizontally according to the `spacing` value.
-    //`xOffset` determines the point from the left of the screen
-    //at which the first blob should be added.
-    let x = spacing * i + xOffset;
+	loader = new PIXI.loaders.Loader();
+	loader.add("frame", "images/frame.png");
+	loader.add("icons", "images/sushi.json");
+	loader.add("button", "images/button.json");
+	loader.on("complete", complete);
+	loader.load();
 
-    //Give the blob a random y position
-    //(`randomInt` is a custom function - see below)
-    let y = randomInt(0, app.stage.height - blob.height);
-
-    //Set the blob's position
-    blob.x = x;
-    blob.y = y;
-
-    //Add the blob sprite to the stage
-    app.stage.addChild(blob);
-  }
+	update();
+}
+function update() {
+	renderer.render(stage);
+	requestAnimationFrame(update);
 }
 
-//The `randomInt` helper function
-function randomInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+function complete() {
+	initialize();
+	setup();
+}
+
+function initialize() {
+	label = new PIXI.Text("", {"font": "24px Arial", "fill": "#666666", "align": "center"});
+	stage.addChild(label);
+	label.position.x = 320;
+	label.position.y = 20;
+
+	var icons = [];
+	icons.push(PIXI.Texture.fromFrame("cut1.png"));
+	icons.push(PIXI.Texture.fromFrame("cut2.png"));
+	icons.push(PIXI.Texture.fromFrame("cut3.png"));
+	icons.push(PIXI.Texture.fromFrame("cut4.png"));
+	icons.push(PIXI.Texture.fromFrame("cut5.png"));
+	icons.push(PIXI.Texture.fromFrame("cut6.png"));
+	icons.push(PIXI.Texture.fromFrame("cut7.png"));
+
+	slots = [];
+	var texture = PIXI.Texture.fromImage("images/frame.png");
+	for (var n = 0; n < max; n++) {
+		var content = new PIXI.Container();
+		container.addChild(content);
+		content.position.x = 110 + 210*n;
+		content.position.y = 170;
+		var base = new PIXI.Graphics();
+		base.beginFill(0xEEEEEE);
+		base.drawRect(-bw, -bh, bw*2, bh*2);
+		base.endFill();
+		content.addChild(base);
+		var slot = new Slot(n, bw, bh, speed, radius);
+		content.addChild(slot);
+		slot.setup(icons);
+		slots.push(slot);
+		var frame = new PIXI.Sprite(texture);
+		frame.pivot.x = 110;
+		frame.pivot.y = 120;
+		content.addChild(frame);
+	}
+}
+
+function play(data) {
+	playBtn.selected(true);
+
+	for (var n = 0; n < max; n++) {
+		var stopBtn = stopBtns[n];
+		stopBtn.enabled(true);
+	}
+
+	start();
+}
+
+function stop(data) {
+	var id = data.target.id;
+
+	var stopBtn = stopBtns[id];
+	stopBtn.selected(true);
+
+	var slot = slots[id];
+	slot.stop();
+}
+
+function start() {
+	for (var n = 0; n < max; n++) {
+		var slot = slots[n];
+		//slot.on("select", selected);
+		//slot.on("complete", scrolled);
+		slot.once("select", selected);
+		slot.once("complete", scrolled);
+		slot.start();
+	}
+	timer = setInterval(tick, 16);
+
+	completed = 0;
+	label.text = "";
+	list = [];
+	checked = 0;
+}
+
+function tick() {
+	for (var n = 0; n < max; n++) {
+		var slot = slots[n];
+		slot.update();
+	}
+}
+
+function selected(event) {
+	//event.off("select", selected);
+	list[event.sid] = event.gid;
+	checked ++;
+	if (checked > max - 1) match();
+}
+
+function scrolled(event) {
+	//event.off("complete", scrolled);
+	completed ++;
+	if (completed > max - 1) {
+		clearInterval(timer);
+		clear();
+	}
+}
+
+function clear() {
+	playBtn.selected(false);
+	for (var n = 0; n < max; n++) {
+		var stopBtn = stopBtns[n];
+		stopBtn.selected(false);
+		stopBtn.enabled(false);
+	}
+}
+
+function match() {
+	if ((list[0] == list[1]) && (list[0] == list[2])) {
+		label.setStyle({"font": "24px Arial", "fill": "#CC0000", "align": "center"});
+		label.text = "match";
+	} else if (list[0] == list[1] || list[0] == list[2] || list[1] == list[2]) {
+		label.setStyle({"font": "24px Arial", "fill": "#333333", "align": "center"});
+		label.text = "reach";
+	} else {
+		label.setStyle({"font": "24px Arial", "fill": "#999999", "align": "center"});
+		label.text = "no match";
+	}
+	label.position.x = 320 - (label.width >> 1);
+}
+
+//layout
+function setup() {
+	var textures_play = {
+		"btn_up" : PIXI.Texture.fromFrame("BT5.png"), 
+		"btn_over" : PIXI.Texture.fromFrame("BT6.png"), 
+		"btn_selected" : PIXI.Texture.fromFrame("BT7.png"), 
+		"btn_disabled" : PIXI.Texture.fromFrame("BT8.png"), 
+	};
+	var textures_stop = {
+		"btn_up" : PIXI.Texture.fromFrame("BT1.png"), 
+		"btn_over" : PIXI.Texture.fromFrame("BT2.png"), 
+		"btn_selected" : PIXI.Texture.fromFrame("BT3.png"), 
+		"btn_disabled" : PIXI.Texture.fromFrame("BT4.png")
+	};
+
+	stopBtns = [];
+	for (var n = 0; n < max; n++) {
+		var stopBtn = new Button(textures_stop);
+		container.addChild(stopBtn);
+		stopBtn.id = n;
+		stopBtn.position.x = 110 + 210*n;
+		stopBtn.position.y = 310;
+		stopBtn.click = stopBtn.touchstart = stop;
+		stopBtn.enabled(false);
+		stopBtns.push(stopBtn);
+	}
+
+	playBtn = new Button(textures_play);
+	container.addChild(playBtn);
+	playBtn.position.x = 320;
+	playBtn.position.y = 370;
+	playBtn.click = playBtn.touchstart = play;
+}
+
+function background() {
+	var version = PIXI.VERSION;
+	var rendererType;
+	switch (renderer.type) {
+		case PIXI.RENDERER_TYPE.WEBGL :
+			rendererType = "WebGL";
+			break;
+		case PIXI.RENDERER_TYPE.CANVAS :
+			rendererType = "Context2D";
+			break;
+	}
+	var txt = "My Slot Sample";
+	var basic = new PIXI.Text(txt, {"font": "14px Arial", "fill": "#000000", "align": "left"});
+	back.addChild(basic);
+	basic.position.x = 4;
+	basic.position.y = 0;
+	basic.alpha = 0.6;
 }
 
 </script>
+</head>
+<body onload="init();" style="background-color:#FFFFFF">
 </body>
-
- -->
+</html>

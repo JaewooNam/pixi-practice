@@ -8,7 +8,6 @@
 <script src="js/slot.js"></script>
 <script src="js/SlotIcon.js"></script>
 <script src="js/button.js"></script>
-<script src="js/stats.min.js"></script>
 
 <style type="text/css">
 	body {
@@ -34,35 +33,52 @@ var label;
 var list;
 var checked = 0;
 
-function init() {
-	stats = new Stats();
-	stats.setMode(0);
-	stats.domElement.style.position = "fixed";
-	stats.domElement.style.right = "0px";
-	stats.domElement.style.top = "0px";
-	document.body.appendChild(stats.domElement);
 
+// How to add text object on the background image
+// Create the background Image
+
+//Add text as a child of the Sprite
+// var text = new PIXI.Text('my custom text',
+//     {
+//       font : '12px Arial',
+//       fill : 0x666666,
+//       align : 'center',
+//       cacheAsBitmap: true, // for better performance
+//       height: 57,
+//       width: 82
+//     });    
+// sprite.addChild(text);
+
+function init() {
 	stage = new PIXI.Container();
-	renderer = PIXI.autoDetectRenderer(640, 400, {backgroundColor: 0xFFFFFF});
+	renderer = PIXI.autoDetectRenderer(750, 600, {backgroundColor: 0xFFFFFF});
 	document.body.appendChild(renderer.view);
 	renderer.view.style.display = "block";
-	renderer.view.style.width = "640px";
+	renderer.view.style.width = "750";
+
 	renderer.view.style.marginTop = "40px";
 	renderer.view.style.marginLeft = "auto";
 	renderer.view.style.marginRight = "auto";
 	renderer.view.style.paddingLeft = "0";
 	renderer.view.style.paddingRight = "0";
 
+
+	// container
 	container = new PIXI.Container();
 	stage.addChild(container);
 	front = new PIXI.Container();
 	stage.addChild(front);
+	
+	//Set background image
+	// var backGroundSprite = PIXI.Sprite.fromImage("images/bg_image.png");
+	// stage.addChild(backGroundSprite);
+	// backGroundSprite.addChild(front);
 
 	background();
 
 	loader = new PIXI.loaders.Loader();
 	loader.add("frame", "images/frame.png");
-	loader.add("icons", "images/sushi.json");
+	loader.add("icons", "images/sushi_reel.json");
 	loader.add("button", "images/button.json");
 	loader.on("complete", complete);
 	loader.load();
@@ -73,7 +89,7 @@ function update() {
 	renderer.render(stage);
 	requestAnimationFrame(update);
 
-	stats.update();
+	// stats.update();
 }
 function complete() {
 	initialize();
@@ -86,13 +102,13 @@ function initialize() {
 	label.position.y = 20;
 
 	var icons = [];
-	icons.push(PIXI.Texture.fromFrame("cut1.png"));
-	icons.push(PIXI.Texture.fromFrame("cut2.png"));
-	icons.push(PIXI.Texture.fromFrame("cut3.png"));
-	icons.push(PIXI.Texture.fromFrame("cut4.png"));
-	icons.push(PIXI.Texture.fromFrame("cut5.png"));
-	icons.push(PIXI.Texture.fromFrame("cut6.png"));
-	icons.push(PIXI.Texture.fromFrame("cut7.png"));
+	icons.push(PIXI.Texture.fromFrame("sushi_01.png"));
+	icons.push(PIXI.Texture.fromFrame("sushi_02.png"));
+	icons.push(PIXI.Texture.fromFrame("sushi_03.png"));
+	icons.push(PIXI.Texture.fromFrame("sushi_04.png"));
+	icons.push(PIXI.Texture.fromFrame("sushi_05.png"));
+	icons.push(PIXI.Texture.fromFrame("sushi_06.png"));
+	icons.push(PIXI.Texture.fromFrame("sushi_07.png"));
 
 	slots = [];
 	var texture = PIXI.Texture.fromImage("images/frame.png");
@@ -116,6 +132,7 @@ function initialize() {
 		content.addChild(frame);
 	}
 }
+
 function play(data) {
 	playBtn.selected(true);
 
@@ -126,6 +143,7 @@ function play(data) {
 
 	start();
 }
+
 function stop(data) {
 	var id = data.target.id;
 
@@ -135,6 +153,7 @@ function stop(data) {
 	var slot = slots[id];
 	slot.stop();
 }
+
 function start() {
 	for (var n = 0; n < max; n++) {
 		var slot = slots[n];
@@ -151,18 +170,21 @@ function start() {
 	list = [];
 	checked = 0;
 }
+
 function tick() {
 	for (var n = 0; n < max; n++) {
 		var slot = slots[n];
 		slot.update();
 	}
 }
+
 function selected(event) {
 	//event.off("select", selected);
 	list[event.sid] = event.gid;
 	checked ++;
 	if (checked > max - 1) match();
 }
+
 function scrolled(event) {
 	//event.off("complete", scrolled);
 	completed ++;
@@ -171,6 +193,7 @@ function scrolled(event) {
 		clear();
 	}
 }
+
 function clear() {
 	playBtn.selected(false);
 	for (var n = 0; n < max; n++) {
@@ -179,8 +202,9 @@ function clear() {
 		stopBtn.enabled(false);
 	}
 }
+
 function match() {
-	if (list[0] == list[1] && list[0] == list[2]) {
+	if ((list[0] == list[1]) && (list[0] == list[2])) {
 		label.setStyle({"font": "24px Arial", "fill": "#CC0000", "align": "center"});
 		label.text = "match";
 	} else if (list[0] == list[1] || list[0] == list[2] || list[1] == list[2]) {
@@ -226,6 +250,7 @@ function setup() {
 	playBtn.position.y = 370;
 	playBtn.click = playBtn.touchstart = play;
 }
+
 function background() {
 	var version = PIXI.VERSION;
 	var rendererType;
@@ -237,13 +262,14 @@ function background() {
 			rendererType = "Context2D";
 			break;
 	}
-	var txt = "My Slot Sample";
-	var basic = new PIXI.Text(txt, {"font": "14px Arial", "fill": "#000000", "align": "left"});
+	var txt = "Sushi Slot";
+	var basic = new PIXI.Text(txt, {"font": "20px Arial", "fill": "#000000", "align": "left"});
 	front.addChild(basic);
 	basic.position.x = 4;
 	basic.position.y = 0;
 	basic.alpha = 0.6;
 }
+
 </script>
 </head>
 <body onload="init();" style="background-color:#FFFFFF">

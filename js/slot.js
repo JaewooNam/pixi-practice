@@ -8,7 +8,7 @@ Slot = (function() {
 		this.init(n, w, h, s, r);
 	}
 
-	// Containerクラス継承
+	// Inberit Container class
 	Slot.prototype = Object.create(PIXI.Container.prototype, {
 		constructor : {value : Slot}
 	});

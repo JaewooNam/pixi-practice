@@ -1,0 +1,75 @@
+{"frames": {
+
+"sushi_01.png":
+{
+	"id": "1",
+	"frame": {"x":1,"y":1,"w":100,"h":100},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
+	"sourceSize": {"w":100,"h":100}
+},
+"sushi_02.png":
+{
+	"id": "2",
+	"frame": {"x":1,"y":103,"w":100,"h":100},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
+	"sourceSize": {"w":100,"h":100}
+},
+"sushi_03.png":
+{
+	"id": "3",
+	"frame": {"x":1,"y":205,"w":100,"h":100},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
+	"sourceSize": {"w":100,"h":100}
+},
+"sushi_04.png":
+{
+	"id": "4",
+	"frame": {"x":1,"y":307,"w":100,"h":63},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":63},
+	"sourceSize": {"w":100,"h":63}
+},
+"sushi_05.png":
+{
+	"id": "5",
+	"frame": {"x":1,"y":372,"w":100,"h":100},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
+	"sourceSize": {"w":100,"h":100}
+},
+"sushi_06.png":
+{
+	"id": "6",
+	"frame": {"x":1,"y":474,"w":100,"h":100},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
+	"sourceSize": {"w":100,"h":100}
+},
+"sushi_07.png":
+{
+	"id": "7",
+	"frame": {"x":1,"y":576,"w":100,"h":100},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":100,"h":100},
+	"sourceSize": {"w":100,"h":100}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "sushi_reel.png",
+	"format": "RGBA8888",
+	"size": {"w":102,"h":677},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:b5638b58e061499882a254bef3acf282:73b82d40d05039109df9efa50f106de2:a238a084bd05b91fa3b4daaaaa0bc140$"
+}
+}
