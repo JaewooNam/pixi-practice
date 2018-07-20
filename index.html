@@ -20,8 +20,8 @@
 var stage, renderer;
 var container, front;
 var loader;
-var bw = 100;
-var bh = 120;
+var bw = 80;
+var bh = 90;
 var max = 3;
 var slots;
 var speed = 8;
@@ -30,9 +30,9 @@ var playBtn, stopBtns;
 var timer;
 var completed = 0;
 var label;
+var balance = 1000;
 var list;
 var checked = 0;
-
 
 // How to add text object on the background image
 // Create the background Image
@@ -51,10 +51,10 @@ var checked = 0;
 
 function init() {
 	stage = new PIXI.Container();
-	renderer = PIXI.autoDetectRenderer(750, 600, {backgroundColor: 0xFFFFFF});
+	renderer = PIXI.autoDetectRenderer(1500, 589, {transparent: true, backgroundColor: 0xFFFFFF});
 	document.body.appendChild(renderer.view);
 	renderer.view.style.display = "block";
-	renderer.view.style.width = "750";
+	renderer.view.style.width = "1500";
 
 	renderer.view.style.marginTop = "40px";
 	renderer.view.style.marginLeft = "auto";
@@ -70,16 +70,16 @@ function init() {
 	stage.addChild(front);
 	
 	//Set background image
-	// var backGroundSprite = PIXI.Sprite.fromImage("images/bg_image.png");
-	// stage.addChild(backGroundSprite);
-	// backGroundSprite.addChild(front);
+	var backGroundSprite = PIXI.Sprite.fromImage("images/bg_image.png");
+	stage.addChild(backGroundSprite);
+	backGroundSprite.addChild(front);
 
 	background();
 
 	loader = new PIXI.loaders.Loader();
-	loader.add("frame", "images/frame.png");
+	//loader.add("frame", "images/frame.png");
 	loader.add("icons", "images/sushi_reel.json");
-	loader.add("button", "images/button.json");
+	loader.add("button", "images/button_images.json");
 	loader.on("complete", complete);
 	loader.load();
 
@@ -101,6 +101,14 @@ function initialize() {
 	label.position.x = 320;
 	label.position.y = 20;
 
+
+	balance = new PIXI.Text("", {"font": "24px Arial", "fill": "#666666", "align": "right"});
+	stage.addChild(label);
+	label.position.x = 320;
+	label.position.y = 20;
+
+
+
 	var icons = [];
 	icons.push(PIXI.Texture.fromFrame("sushi_01.png"));
 	icons.push(PIXI.Texture.fromFrame("sushi_02.png"));
@@ -111,14 +119,15 @@ function initialize() {
 	icons.push(PIXI.Texture.fromFrame("sushi_07.png"));
 
 	slots = [];
-	var texture = PIXI.Texture.fromImage("images/frame.png");
+	//var texture = PIXI.Texture.fromImage("images/bg_image.png");
 	for (var n = 0; n < max; n++) {
 		var content = new PIXI.Container();
 		container.addChild(content);
-		content.position.x = 110 + 210*n;
-		content.position.y = 170;
+		content.position.x = 120 + 150*n;
+		content.position.y = 300;
 		var base = new PIXI.Graphics();
-		base.beginFill(0xEEEEEE);
+		// Fill color in reel
+		base.beginFill(0xe9fff8);
 		base.drawRect(-bw, -bh, bw*2, bh*2);
 		base.endFill();
 		content.addChild(base);
@@ -126,11 +135,16 @@ function initialize() {
 		content.addChild(slot);
 		slot.setup(icons);
 		slots.push(slot);
-		var frame = new PIXI.Sprite(texture);
-		frame.pivot.x = 110;
-		frame.pivot.y = 120;
-		content.addChild(frame);
+		// var frame = new PIXI.Sprite(texture);
+		// frame.pivot.x = 110;
+		// frame.pivot.y = 120;
+		// content.addChild(frame);
 	}
+
+	// var frame = new PIXI.Sprite(texture);
+	// frame.pivot.x = 10;
+	// frame.pivot.y = 10;
+	// content.addChild(frame);
 }
 
 function play(data) {
@@ -204,15 +218,21 @@ function clear() {
 }
 
 function match() {
+
+	console.log(list[0]);
+	console.log(list[1]);
+	console.log(list[2]);
 	if ((list[0] == list[1]) && (list[0] == list[2])) {
 		label.setStyle({"font": "24px Arial", "fill": "#CC0000", "align": "center"});
-		label.text = "match";
+		label.text = "test1";
 	} else if (list[0] == list[1] || list[0] == list[2] || list[1] == list[2]) {
 		label.setStyle({"font": "24px Arial", "fill": "#333333", "align": "center"});
 		label.text = "reach";
+		label.text = "test2";
 	} else {
 		label.setStyle({"font": "24px Arial", "fill": "#999999", "align": "center"});
 		label.text = "no match";
+		label.text = "test3";
 	}
 	label.position.x = 320 - (label.width >> 1);
 }
@@ -220,34 +240,36 @@ function match() {
 //layout
 function setup() {
 	var textures_play = {
-		"btn_up" : PIXI.Texture.fromFrame("BT5.png"), 
-		"btn_over" : PIXI.Texture.fromFrame("BT6.png"), 
-		"btn_selected" : PIXI.Texture.fromFrame("BT7.png"), 
-		"btn_disabled" : PIXI.Texture.fromFrame("BT8.png"), 
+		"btn_up" : PIXI.Texture.fromFrame("start_btn_3.png"), 
+		"btn_over" : PIXI.Texture.fromFrame("start_btn_1.png"), 
+		"btn_selected" : PIXI.Texture.fromFrame("start_btn_1.png"), 
+		"btn_disabled" : PIXI.Texture.fromFrame("start_btn_2.png"), 
 	};
 	var textures_stop = {
-		"btn_up" : PIXI.Texture.fromFrame("BT1.png"), 
-		"btn_over" : PIXI.Texture.fromFrame("BT2.png"), 
-		"btn_selected" : PIXI.Texture.fromFrame("BT3.png"), 
-		"btn_disabled" : PIXI.Texture.fromFrame("BT4.png")
+		"btn_up" : PIXI.Texture.fromFrame("stop_btn_3.png"), 
+		"btn_over" : PIXI.Texture.fromFrame("stop_btn_1.png"), 
+		"btn_selected" : PIXI.Texture.fromFrame("stop_btn_1.png"), 
+		"btn_disabled" : PIXI.Texture.fromFrame("stop_btn_2.png")
 	};
 
 	stopBtns = [];
 	for (var n = 0; n < max; n++) {
 		var stopBtn = new Button(textures_stop);
-		container.addChild(stopBtn);
+		front.addChild(stopBtn);
 		stopBtn.id = n;
-		stopBtn.position.x = 110 + 210*n;
-		stopBtn.position.y = 310;
+		// content.position.x = 120 + 150*n;
+		// content.position.y = 300;
+		stopBtn.position.x = 130 + 150*n;
+		stopBtn.position.y = 380;
 		stopBtn.click = stopBtn.touchstart = stop;
 		stopBtn.enabled(false);
 		stopBtns.push(stopBtn);
 	}
 
 	playBtn = new Button(textures_play);
-	container.addChild(playBtn);
-	playBtn.position.x = 320;
-	playBtn.position.y = 370;
+	front.addChild(playBtn);
+	playBtn.position.x = 270;
+	playBtn.position.y = 480;
 	playBtn.click = playBtn.touchstart = play;
 }
 
