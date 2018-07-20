@@ -5,8 +5,6 @@
 	"frame": {"x":2,"y":2,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
-	"sourceSize": {"w":64,"h":64},
 	"pivot": {"x":0.5,"y":0.5}
 },
 "icon1.png":
@@ -14,8 +12,6 @@
 	"frame": {"x":68,"y":2,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
-	"sourceSize": {"w":64,"h":64},
 	"pivot": {"x":0.5,"y":0.5}
 },
 "icon2.png":
@@ -23,8 +19,6 @@
 	"frame": {"x":2,"y":2,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
-	"sourceSize": {"w":64,"h":64},
 	"pivot": {"x":0.5,"y":0.5}
 },
 "icon3.png":
@@ -32,8 +26,6 @@
 	"frame": {"x":68,"y":2,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
-	"sourceSize": {"w":64,"h":64},
 	"pivot": {"x":0.5,"y":0.5}
 },
 "icon4.png":
@@ -41,8 +33,6 @@
 	"frame": {"x":2,"y":2,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
-	"sourceSize": {"w":64,"h":64},
 	"pivot": {"x":0.5,"y":0.5}
 },
 "icon5.png":
@@ -50,8 +40,6 @@
 	"frame": {"x":68,"y":2,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
-	"sourceSize": {"w":64,"h":64},
 	"pivot": {"x":0.5,"y":0.5}
 },
 "icon6.png":
@@ -59,8 +47,6 @@
 	"frame": {"x":2,"y":2,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
-	"sourceSize": {"w":64,"h":64},
 	"pivot": {"x":0.5,"y":0.5}
 },
 "icon7.png":
@@ -68,8 +54,6 @@
 	"frame": {"x":68,"y":2,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
-	"sourceSize": {"w":64,"h":64},
 	"pivot": {"x":0.5,"y":0.5}
 },
 "icon8.png":
@@ -77,8 +61,6 @@
 	"frame": {"x":2,"y":2,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
-	"sourceSize": {"w":64,"h":64},
 	"pivot": {"x":0.5,"y":0.5}
 },
 "icon9.png":
@@ -86,8 +68,6 @@
 	"frame": {"x":68,"y":2,"w":64,"h":64},
 	"rotated": false,
 	"trimmed": false,
-	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
-	"sourceSize": {"w":64,"h":64},
 	"pivot": {"x":0.5,"y":0.5}
 }},
 	"meta": {
@@ -95,7 +75,7 @@
 		"version": "1.0",
 		"image": "icons.png",
 		"format": "RGBA8888",
-		"size": {"w":512,"h":1024},
+		"size": {"w":250,"h":1024},
 		"scale": "1",
 		"smartupdate": "$TexturePacker:SmartUpdate:e8288eee1f85bc54e0176cccf5d39ca9:4d76b62658c12a43ddb89b1c51d606b9:8de89472cfa2a2e037de51532ebb60f3$"
 	}

@@ -35,12 +35,12 @@ var list;
 var checked = 0;
 
 function init() {
-	// stats = new Stats();
-	// stats.setMode(0);
-	// stats.domElement.style.position = "fixed";
-	// stats.domElement.style.right = "0px";
-	// stats.domElement.style.top = "0px";
-	// document.body.appendChild(stats.domElement);
+	stats = new Stats();
+	stats.setMode(0);
+	stats.domElement.style.position = "fixed";
+	stats.domElement.style.right = "0px";
+	stats.domElement.style.top = "0px";
+	document.body.appendChild(stats.domElement);
 
 	stage = new PIXI.Container();
 	renderer = PIXI.autoDetectRenderer(640, 400, {backgroundColor: 0xFFFFFF});
@@ -63,7 +63,7 @@ function init() {
 	loader = new PIXI.loaders.Loader();
 	loader.add("frame", "images/frame.png");
 	loader.add("icons", "images/sushi.json");
-	//loader.add("button", "images/button.json");
+	loader.add("button", "images/button.json");
 	loader.on("complete", complete);
 	loader.load();
 
@@ -73,11 +73,11 @@ function update() {
 	renderer.render(stage);
 	requestAnimationFrame(update);
 
-	// stats.update();
+	stats.update();
 }
 function complete() {
 	initialize();
-	//setup();
+	setup();
 }
 function initialize() {
 	label = new PIXI.Text("", {"font": "24px Arial", "fill": "#666666", "align": "center"});
@@ -194,38 +194,38 @@ function match() {
 }
 
 //layout
-// function setup() {
-// 	var textures_play = {
-// 		"btn_up" : PIXI.Texture.fromFrame("BTN1.png"), 
-// 		"btn_over" : PIXI.Texture.fromFrame("BTN2.png"), 
-// 		"btn_selected" : PIXI.Texture.fromFrame("BTN3.png"), 
-// 		"btn_disabled" : PIXI.Texture.fromFrame("BTN4.png"), 
-// 	};
-// 	var textures_stop = {
-// 		"btn_up" : PIXI.Texture.fromFrame("BTN5.png"), 
-// 		"btn_over" : PIXI.Texture.fromFrame("BTN6.png"), 
-// 		"btn_selected" : PIXI.Texture.fromFrame("BTN7.png"), 
-// 		"btn_disabled" : PIXI.Texture.fromFrame("BTN8.png")
-// 	};
+function setup() {
+	var textures_play = {
+		"btn_up" : PIXI.Texture.fromFrame("BT5.png"), 
+		"btn_over" : PIXI.Texture.fromFrame("BT6.png"), 
+		"btn_selected" : PIXI.Texture.fromFrame("BT7.png"), 
+		"btn_disabled" : PIXI.Texture.fromFrame("BT8.png"), 
+	};
+	var textures_stop = {
+		"btn_up" : PIXI.Texture.fromFrame("BT1.png"), 
+		"btn_over" : PIXI.Texture.fromFrame("BT2.png"), 
+		"btn_selected" : PIXI.Texture.fromFrame("BT3.png"), 
+		"btn_disabled" : PIXI.Texture.fromFrame("BT4.png")
+	};
 
-// 	stopBtns = [];
-// 	for (var n = 0; n < max; n++) {
-// 		var stopBtn = new Button(textures_stop);
-// 		container.addChild(stopBtn);
-// 		stopBtn.id = n;
-// 		stopBtn.position.x = 110 + 210*n;
-// 		stopBtn.position.y = 310;
-// 		stopBtn.click = stopBtn.touchstart = stop;
-// 		stopBtn.enabled(false);
-// 		stopBtns.push(stopBtn);
-// 	}
+	stopBtns = [];
+	for (var n = 0; n < max; n++) {
+		var stopBtn = new Button(textures_stop);
+		container.addChild(stopBtn);
+		stopBtn.id = n;
+		stopBtn.position.x = 110 + 210*n;
+		stopBtn.position.y = 310;
+		stopBtn.click = stopBtn.touchstart = stop;
+		stopBtn.enabled(false);
+		stopBtns.push(stopBtn);
+	}
 
-// 	playBtn = new Button(textures_play);
-// 	container.addChild(playBtn);
-// 	playBtn.position.x = 320;
-// 	playBtn.position.y = 370;
-// 	playBtn.click = playBtn.touchstart = play;
-// }
+	playBtn = new Button(textures_play);
+	container.addChild(playBtn);
+	playBtn.position.x = 320;
+	playBtn.position.y = 370;
+	playBtn.click = playBtn.touchstart = play;
+}
 function background() {
 	var version = PIXI.VERSION;
 	var rendererType;
