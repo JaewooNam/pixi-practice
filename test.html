@@ -1,0 +1,90 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Make a sprite from a texture atlas</title>
+<body>
+<script src="js/pixi.min.js"></script>
+<script>
+
+//Aliases
+let Application = PIXI.Application,
+    Container = PIXI.Container,
+    loader = PIXI.loader,
+    resources = PIXI.loader.resources,
+    TextureCache = PIXI.utils.TextureCache,
+    Sprite = PIXI.Sprite,
+    Rectangle = PIXI.Rectangle;
+
+//Create a Pixi Application
+let app = new Application({ 
+    width: 512, 
+    height: 512,                       
+    antialiasing: true, 
+    transparent: false, 
+    resolution: 1
+  }
+);
+
+//Add the canvas that Pixi automatically created for you to the HTML document
+document.body.appendChild(app.view);
+
+//load a JSON file and run the `setup` function when it's done
+loader
+  .add("images/dungeon.png")
+  .load(setup);
+
+//Define variables that might be used in more 
+//than one function
+let dungeon, explorer, treasure, door, id;
+
+function setup() {
+
+  //There are 3 ways to make sprites from textures atlas frames
+
+  //1. Access the `TextureCache` directly
+  let dungeonTexture = TextureCache["images/dungeon.png"];
+  dungeon = new Sprite(dungeonTexture);
+  app.stage.addChild(dungeon);
+
+
+  //Make the exit door
+
+
+  //Make the blobs
+  let numberOfBlobs = 6,
+      spacing = 48,
+      xOffset = 150;
+
+  //Make as many blobs as there are `numberOfBlobs`
+  let a = TextureCache["images/sushi.png"];
+  for (let i = 0; i < numberOfBlobs; i++) {
+
+    //Make a blob
+    let blob = new Sprite(a);
+
+    //Space each blob horizontally according to the `spacing` value.
+    //`xOffset` determines the point from the left of the screen
+    //at which the first blob should be added.
+    let x = spacing * i + xOffset;
+
+    //Give the blob a random y position
+    //(`randomInt` is a custom function - see below)
+    let y = randomInt(0, app.stage.height - blob.height);
+
+    //Set the blob's position
+    blob.x = x;
+    blob.y = y;
+
+    //Add the blob sprite to the stage
+    app.stage.addChild(blob);
+  }
+}
+
+//The `randomInt` helper function
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+</script>
+</body>
+
+
