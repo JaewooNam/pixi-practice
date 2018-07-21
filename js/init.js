@@ -156,15 +156,13 @@ function play(data) {
     sound.play();
 
     playBtn.selected(true);
-    totalBetMoney.text = totalBetMoney.text - betMoney.text;
-    var testNumber;
-    testNumber = parseInt(totalBetMoney.text);
-
-    if (testNumber == 990) {
-        console.log("totalBetMoney equls 500");
+    if (totalBetMoney.text - betMoney.text >= 0 && betMoney.text > 0) {
+        totalBetMoney.text = totalBetMoney.text - betMoney.text;
     } else {
-        console.log("totalBetMoney not equls 500");
+        playBtn.enabled(true);
+        return;
     }
+
 	for (var n = 0; n < max; n++) {
 		var stopBtn = stopBtns[n];
 		stopBtn.enabled(true);
@@ -282,17 +280,10 @@ function setup() {
 		"btn_disabled" : PIXI.Texture.fromFrame("start_button_2.png"), 
 	};
 	var textures_stop = {
-		"btn_up" : PIXI.Texture.fromFrame("stop_btn_3.png"), 
-		"btn_over" : PIXI.Texture.fromFrame("stop_btn_1.png"), 
-		"btn_selected" : PIXI.Texture.fromFrame("stop_btn_4.png"), 
-		"btn_disabled" : PIXI.Texture.fromFrame("stop_btn_2.png")
-	};
-
-	var buttonSample = {
-		"btn1" : PIXI.Texture.fromFrame("stop_btn_3.png"), 
-		"btn2" : PIXI.Texture.fromFrame("stop_btn_3.png"),
-		"btn3" : PIXI.Texture.fromFrame("stop_btn_3.png"),
-		"btn4" : PIXI.Texture.fromFrame("stop_btn_3.png"),
+		"btn_up" : PIXI.Texture.fromFrame("stop_button_1.png"), 
+		"btn_over" : PIXI.Texture.fromFrame("stop_button_2.png"), 
+		"btn_selected" : PIXI.Texture.fromFrame("stop_button_4.png"), 
+		"btn_disabled" : PIXI.Texture.fromFrame("stop_button_3.png")
 	};
 
 	stopBtns = [];
@@ -302,8 +293,8 @@ function setup() {
 		stopBtn.id = n;
 		// content.position.x = 120 + 150*n;
 		// content.position.y = 300;
-		stopBtn.position.x = 130 + 150*n;
-		stopBtn.position.y = 380;
+		stopBtn.position.x = 125 + 150*n;
+		stopBtn.position.y = 383;
 		stopBtn.click = stopBtn.touchstart = stop;
 		stopBtn.enabled(false);
 		stopBtns.push(stopBtn);
@@ -312,8 +303,9 @@ function setup() {
 	playBtn = new Button(textures_play);
 	front.addChild(playBtn);
 	playBtn.position.x = 270;
-	playBtn.position.y = 460;
-	playBtn.click = playBtn.touchstart = play;
+    playBtn.position.y = 460;
+
+    playBtn.click = playBtn.touchstart = play;
 	// console.log("play btn clicked!");
 
 
@@ -330,8 +322,8 @@ function setup() {
 	plusBtn.height = 30;
 	front.addChild(plusBtn);
 	plusBtn.interactive = true;
-	plusBtn.buttonMode = true;
-	plusBtn.on('pointerdown', addOneHero);
+    plusBtn.buttonMode = true;
+    plusBtn.on('pointerdown', addOneHero);
 
 	minusBtn.x = 10;
 	minusBtn.y = 550;
@@ -339,9 +331,13 @@ function setup() {
 	minusBtn.height = 30;
 	front.addChild(minusBtn);
 	minusBtn.interactive = true;
-	minusBtn.buttonMode = true;
-	minusBtn.on('pointerdown', minusCoin);
-
+    minusBtn.buttonMode = true;
+    var ccc = parseInt(betMoney.text);
+    if (ccc < 10) {
+        minusBtn.enabled(true);
+        return;
+    }
+    minusBtn.on('pointerdown', minusCoin);
 }
 
 function background() {
@@ -394,9 +390,14 @@ function addOneHero () {
     console.log("it is true");
     console.log(typeof(betMoney.text));
     var a;
+    var b;
     a = parseInt(betMoney.text);
-    console.log(typeof(a));
-    betMoney.text = a + 10;
+    b = parseInt(totalBetMoney.text);
+
+    if (a <= b) {
+        betMoney.text = a + 10;
+    }
+
 	// heroBetCounterNumber.text++;
 	// totalBets.text++;
 	// console.log(totalBets.text);
@@ -419,11 +420,15 @@ function addOneHero () {
 function minusCoin() {
     sound5.play();
     console.log("it is true");
-    console.log(typeof(betMoney.text));
     var a;
     a = parseInt(betMoney.text);
-    console.log(typeof(a));
-    betMoney.text = a - 10;
+    if (betMoney.text > 0) {
+        betMoney.text = a - 10;
+    } else {
+        playBtn.enabled(true);
+        return;
+    }
+
 	// heroBetCounterNumber.text++;
 	// totalBets.text++;
 	// console.log(totalBets.text);
