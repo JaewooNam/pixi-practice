@@ -21,7 +21,7 @@ let totalBetMoney = new PIXI.Text(1000, {fontFamily: 'Arial-Bold', fontSize: 36,
 let betMoney = new PIXI.Text(10, {fontFamily: 'Arial-Bold', fontSize: 36, fill: 0xFFFFFF, align: 'left'});
 totalBetMoney.x = 530;
 totalBetMoney.y = 545;
-betMoney.x = 70;
+betMoney.x = 85;
 betMoney.y = 545;
 
 var sound = new Howl({
