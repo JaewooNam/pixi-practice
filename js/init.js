@@ -33,7 +33,7 @@ var sound2 = new Howl({
     src: ['sound/bgm_lobby.mp3'],
     volume: 0.6
 });
-sound2.play();
+sound.play();
 
 var sound3 = new Howl({
     src: ['sound/ui_3.mp3'],
@@ -152,8 +152,6 @@ function initialize() {
 function play(data) {
 
     console.log("play btn clicked");
-    sound2.pause();
-    sound.play();
 
     playBtn.selected(true);
     if (totalBetMoney.text - betMoney.text >= 0 && betMoney.text > 0) {
@@ -268,7 +266,7 @@ function match() {
         // spinningText.position.y = 300;
     }
     
-    sound.stop();
+//    sound.stop();
 }
 
 //layout
