@@ -55,6 +55,11 @@ var matchedSound = new Howl({
     volume: 0.8
 });
 
+var startSound = new Howl({
+    src: ['sound/Rescue_Blast_Start.mp3'],
+    volume: 0.8
+});
+
 
 stage = new PIXI.Container();
 renderer = PIXI.autoDetectRenderer(1500, 589, {transparent: true, backgroundColor: 0xFFFFFF});
@@ -152,7 +157,7 @@ function initialize() {
 function play(data) {
 
     console.log("play btn clicked");
-
+    startSound.play();
     playBtn.selected(true);
     if (totalBetMoney.text - betMoney.text >= 0 && betMoney.text > 0) {
         totalBetMoney.text = totalBetMoney.text - betMoney.text;
