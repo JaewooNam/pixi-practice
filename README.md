@@ -1,3 +1,5 @@
+### Sushi-slot
+# If doesn't work on Chrome,Safari, Please use FireFox.
+
 ### Demos
-# If doesn't work on Chrome, Please use to FireFox.
-* [demo](http://JaewooNam.github.io/practice-slot-machine-pixi/index.html)
+* [demo](http://jaewoonam.github.io/practice-slot-machine-pixi/index.html)

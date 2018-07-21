@@ -49,6 +49,11 @@ var sound5 = new Howl({
     volume: 0.8
 });
 
+var matchedSound = new Howl({
+    src: ['sound/r_medal.mp3'],
+    volume: 0.8
+});
+
 
 stage = new PIXI.Container();
 renderer = PIXI.autoDetectRenderer(1500, 589, {transparent: true, backgroundColor: 0xFFFFFF});
@@ -69,7 +74,7 @@ stage.addChild(container);
 front = new PIXI.Container();
 stage.addChild(front);
 
-//Set background image
+// Set background image
 var backGroundSprite = PIXI.Sprite.fromImage("images/bg_image.png");
 stage.addChild(backGroundSprite);
 backGroundSprite.addChild(front);
@@ -89,13 +94,11 @@ update();
 front.addChild(totalBetMoney);
 front.addChild(betMoney);
 
-    
 function update() {
 	renderer.render(stage);
 	requestAnimationFrame(update);
-
-	// stats.update();
 }
+
 function complete() {
 	initialize();
 	setup();
@@ -234,7 +237,7 @@ function match() {
     var paresBetMoney;
     var matchingBonus;
 
-    var spinningText = new PIXI.Text('JackPot!!', {
+    var spinningText = new PIXI.Text("WIN !!", {
         fontWeight: 'bold',
         fontSize: 60,
         fontFamily: 'Arial',
@@ -245,31 +248,27 @@ function match() {
     });
 
 	if ((list[0] == list[1]) && (list[0] == list[2])) {
-		label.setStyle({"font": "24px Arial", "fill": "#CC0000", "align": "center"});
-		label.text = "test1";
-	} else if (list[0] == list[1] || list[0] == list[2] || list[1] == list[2]) {
-		label.setStyle({"font": "24px Arial", "fill": "#333333", "align": "center"});
-		//label.text = "reach";
-		label.text = "test2";
-	} else {
-		label.setStyle({"font": "24px Arial", "fill": "#999999", "align": "center"});
-		//label.text = "no match";
-        label.text = "test3";
         parsedTotalBetMoney = parseInt(totalBetMoney.text);
         parsedBetMoney = parseInt(betMoney.text);
         matchingBonus = parsedBetMoney * 10;
-
-        console.log(parsedTotalBetMoney);
-        console.log(parsedBetMoney);
-        console.log(matchingBonus);
         totalBetMoney.text = parsedTotalBetMoney + matchingBonus;
         front.addChild(spinningText);
 
         spinningText.marginLeft = 1000;
         spinningText.position.y = 300;
+
+        matchedSound.play();
+	} else {
+        // parsedTotalBetMoney = parseInt(totalBetMoney.text);
+        // parsedBetMoney = parseInt(betMoney.text);
+        // matchingBonus = parsedBetMoney * 10;
+        // totalBetMoney.text = parsedTotalBetMoney + matchingBonus;
+        // front.addChild(spinningText);
+
+        // spinningText.marginLeft = 1000;
+        // spinningText.position.y = 300;
     }
     
-    label.position.x = 320 - (label.width >> 1);
     sound.stop();
 }
 
