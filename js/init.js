@@ -19,9 +19,36 @@ var checked = 0;
 
 let totalBetMoney = new PIXI.Text(1000, {fontFamily: 'Arial-Bold', fontSize: 36, fill: 0xfffffff, align: 'center'});
 let betMoney = new PIXI.Text(10, {fontFamily: 'Arial-Bold', fontSize: 36, fill: 0xfffffff, align: 'left'});
-totalBetMoney.x = 100;
-betMoney.x = 100;
+totalBetMoney.x = 300;
+betMoney.x = 300;
 betMoney.y = 50;
+
+var sound = new Howl({
+    src: ['sound/bgm_main_rockstar.mp3'],
+    volume: 0.6
+});
+
+var sound2 = new Howl({
+    src: ['sound/bgm_lobby.mp3'],
+    volume: 0.6
+});
+sound2.play();
+
+var sound3 = new Howl({
+    src: ['sound/ui_3.mp3'],
+    volume: 0.8
+});
+
+var sound4 = new Howl({
+    src: ['sound/plus_coin.mp3'],
+    volume: 0.8
+});
+
+var sound5 = new Howl({
+    src: ['sound/minus_coin.mp3'],
+    volume: 0.8
+});
+
 
 stage = new PIXI.Container();
 renderer = PIXI.autoDetectRenderer(1500, 589, {transparent: true, backgroundColor: 0xFFFFFF});
@@ -121,6 +148,9 @@ function initialize() {
 function play(data) {
 
     console.log("play btn clicked");
+    sound2.pause();
+    sound.play();
+
     playBtn.selected(true);
     totalBetMoney.text = totalBetMoney.text - betMoney.text;
     var testNumber;
@@ -162,7 +192,8 @@ function stop(data) {
 	var stopBtn = stopBtns[id];
 	stopBtn.selected(true);
 
-	var slot = slots[id];
+    var slot = slots[id];
+    sound3.play();
 	slot.stop();
 }
 
@@ -199,6 +230,20 @@ function clear() {
 }
 
 function match() {
+    var parsedTotalBetMoney;
+    var paresBetMoney;
+    var matchingBonus;
+
+    var spinningText = new PIXI.Text('JackPot!!', {
+        fontWeight: 'bold',
+        fontSize: 60,
+        fontFamily: 'Arial',
+        fill: '#cc00ff',
+        align: 'center',
+        stroke: '#FFFFFF',
+        strokeThickness: 6
+    });
+
 	if ((list[0] == list[1]) && (list[0] == list[2])) {
 		label.setStyle({"font": "24px Arial", "fill": "#CC0000", "align": "center"});
 		label.text = "test1";
@@ -209,9 +254,23 @@ function match() {
 	} else {
 		label.setStyle({"font": "24px Arial", "fill": "#999999", "align": "center"});
 		//label.text = "no match";
-		label.text = "test3";
-	}
-	label.position.x = 320 - (label.width >> 1);
+        label.text = "test3";
+        parsedTotalBetMoney = parseInt(totalBetMoney.text);
+        parsedBetMoney = parseInt(betMoney.text);
+        matchingBonus = parsedBetMoney * 10;
+
+        console.log(parsedTotalBetMoney);
+        console.log(parsedBetMoney);
+        console.log(matchingBonus);
+        totalBetMoney.text = parsedTotalBetMoney + matchingBonus;
+        front.addChild(spinningText);
+
+        spinningText.marginLeft = 1000;
+        spinningText.position.y = 300;
+    }
+    
+    label.position.x = 320 - (label.width >> 1);
+    sound.stop();
 }
 
 //layout
@@ -293,7 +352,7 @@ function setup() {
 	front.addChild(minusBtn);
 	minusBtn.interactive = true;
 	minusBtn.buttonMode = true;
-	minusBtn.on('pointerdown', addOneHero);
+	minusBtn.on('pointerdown', minusCoin);
 
 }
 
@@ -307,24 +366,76 @@ function background() {
 		case PIXI.RENDERER_TYPE.CANVAS :
 			rendererType = "Context2D";
 			break;
-	}
-	var txt = "Sushi Slot";
-	var basic = new PIXI.Text(txt, {"font": "20px Arial", "fill": "#000000", "align": "left"});
-	front.addChild(basic);
+    }
+    
+    var style = new PIXI.TextStyle({
+        fontFamily: 'Arial',
+        fontSize: 36,
+        fontStyle: 'italic',
+        fontWeight: 'bold',
+        fill: ['#ffffff', '#00ff99'], // gradient
+        stroke: '#4a1850',
+        strokeThickness: 5,
+        dropShadow: true,
+        dropShadowColor: '#000000',
+        dropShadowBlur: 4,
+        dropShadowAngle: Math.PI / 6,
+        dropShadowDistance: 6,
+        wordWrap: true,
+        wordWrapWidth: 440
+    });
+    
+    var richText = new PIXI.Text("Sushi Slot", style);
 
-	basic.position.x = 4;
-	basic.position.y = 0;
-	basic.alpha = 0.6;
+	// var txt = "Sushi Slot";
+	// var basic = new PIXI.Text(txt, {"font": "20px Arial", "fill": "#000000", "align": "left"});
+	front.addChild(richText);
+
+	// basic.position.x = 4;
+	// basic.position.y = 0;
+    // basic.alpha = 0.6;
+    
+    richText.position.x = 4;
+	richText.position.y = 0;
+	richText.alpha = 0.6;
 }
 
 
 function addOneHero () {
+    sound4.play();
     console.log("it is true");
     console.log(typeof(betMoney.text));
     var a;
     a = parseInt(betMoney.text);
     console.log(typeof(a));
     betMoney.text = a+ 10;
+	// heroBetCounterNumber.text++;
+	// totalBets.text++;
+	// console.log(totalBets.text);
+	// balanceLeft.text--;
+	// if(balanceLeft.text <0) {
+	// 	alert("You are out of cash!");
+	// 	balanceLeft.text++;
+	// 	totalBets.text --;
+	// 	heroBetCounterNumber.text--;
+	// 	console.log(totalBets.text);
+	// }
+	// var audio_bet = document.getElementById("audio_bet");
+	// if (audio_bet.paused) {
+	// 	audio_bet.play();        
+	// } else {
+	// 	audio_bet.currentTime = 0;
+	// }
+}
+
+function minusCoin() {
+    sound5.play();
+    console.log("it is true");
+    console.log(typeof(betMoney.text));
+    var a;
+    a = parseInt(betMoney.text);
+    console.log(typeof(a));
+    betMoney.text = a - 10;
 	// heroBetCounterNumber.text++;
 	// totalBets.text++;
 	// console.log(totalBets.text);
