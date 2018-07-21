@@ -1,22 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Slot | pixi.js</title>
-<script src="js/pixi.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.7.1/pixi.min.js"></script>
-<script src="js/slot.js"></script>
-<script src="js/SlotIcon.js"></script>
-<script src="js/button.js"></script>
-
-<style type="text/css">
-	body {
-		margin: 0;
-		padding: 0;
-	}
-</style>
-
-<script>
 var stage, renderer;
 var container, front
 var balanceStatus;
@@ -32,57 +13,56 @@ var timer;
 var completed = 0;
 var label;
 var balance = 1000;
-
-let totalBetMoney = new PIXI.text(0);
-
 var totalBalanceMoney;
-var betMoney = 10;
 var list;
 var checked = 0;
 
-function init() {
-	stage = new PIXI.Container();
-	renderer = PIXI.autoDetectRenderer(1500, 589, {transparent: true, backgroundColor: 0xFFFFFF});
-	document.body.appendChild(renderer.view);
-	renderer.view.style.display = "block";
-	renderer.view.style.width = "1500";
+let totalBetMoney = new PIXI.Text(1000, {fontFamily: 'Arial-Bold', fontSize: 36, fill: 0xfffffff, align: 'center'});
+let betMoney = new PIXI.Text(10, {fontFamily: 'Arial-Bold', fontSize: 36, fill: 0xfffffff, align: 'left'});
+totalBetMoney.x = 100;
+betMoney.x = 100;
+betMoney.y = 50;
 
-	renderer.view.style.marginTop = "40px";
-	renderer.view.style.marginLeft = "auto";
-	renderer.view.style.marginRight = "auto";
-	renderer.view.style.paddingLeft = "0";
-	renderer.view.style.paddingRight = "0";
+stage = new PIXI.Container();
+renderer = PIXI.autoDetectRenderer(1500, 589, {transparent: true, backgroundColor: 0xFFFFFF});
+document.body.appendChild(renderer.view);
+renderer.view.style.display = "block";
+renderer.view.style.width = "1500";
+
+renderer.view.style.marginTop = "40px";
+renderer.view.style.marginLeft = "auto";
+renderer.view.style.marginRight = "auto";
+renderer.view.style.paddingLeft = "0";
+renderer.view.style.paddingRight = "0";
 
 
-	// container
-	container = new PIXI.Container();
-	stage.addChild(container);
-	front = new PIXI.Container();
-	stage.addChild(front);
-	
-	//Set background image
-	var backGroundSprite = PIXI.Sprite.fromImage("images/bg_image.png");
-	stage.addChild(backGroundSprite);
-	backGroundSprite.addChild(front);
+// container
+container = new PIXI.Container();
+stage.addChild(container);
+front = new PIXI.Container();
+stage.addChild(front);
 
-	background();
+//Set background image
+var backGroundSprite = PIXI.Sprite.fromImage("images/bg_image.png");
+stage.addChild(backGroundSprite);
+backGroundSprite.addChild(front);
 
-	let totalBetMoney = new PIXI.Text(0, {fontFamily: 'Arial-Bold', fontSize: 36, fill: 0xfffffff, align: 'center'});
-	totalBetMoney.text = 1000;
-	totalBetMoney.x = 20;
-	totalBetMoney.y = 36;
-	stage.addChild(totalBetMoney);
+background();
 
-	loader = new PIXI.loaders.Loader();
-	//loader.add("frame", "images/frame.png");c
-	loader.add("icons", "images/sushi_reel.json");
-	loader.add("button", "images/button_images.json");
-	loader.add("button2", "images/bet_images.json")
-	loader.on("complete", complete);
-	loader.load();
+loader = new PIXI.loaders.Loader();
+//loader.add("frame", "images/frame.png");c
+loader.add("icons", "images/sushi_reel.json");
+loader.add("button", "images/button_images.json");
+loader.add("button2", "images/bet_images.json")
+loader.on("complete", complete);
+loader.load();
 
-	update();
-}
+update();
+
+front.addChild(totalBetMoney);
+front.addChild(betMoney);
+
+    
 function update() {
 	renderer.render(stage);
 	requestAnimationFrame(update);
@@ -93,6 +73,7 @@ function complete() {
 	initialize();
 	setup();
 }
+
 function initialize() {
 	label = new PIXI.Text("", {"font": "24px Arial", "fill": "#666666", "align": "center"});
 	stage.addChild(label);
@@ -138,24 +119,27 @@ function initialize() {
 }
 
 function play(data) {
-	console.log("balanace = ", balance);
-	console.log("play btn clicked");
-	playBtn.selected(true);
 
+    console.log("play btn clicked");
+    playBtn.selected(true);
+    totalBetMoney.text = totalBetMoney.text - betMoney.text;
+    var testNumber;
+    testNumber = parseInt(totalBetMoney.text);
+
+    if (testNumber == 990) {
+        console.log("totalBetMoney equls 500");
+    } else {
+        console.log("totalBetMoney not equls 500");
+    }
 	for (var n = 0; n < max; n++) {
 		var stopBtn = stopBtns[n];
 		stopBtn.enabled(true);
 	}
 
-	balance -= 10;
-	totalBetMoney.text++;
-	console.log("Increased test = ", totalBetMoney);
-	start(balance);
+	start();
 }
 
-function start(balanace) {
-	console.log("in start function");
-	console.log("balance = ", balance);
+function start() {
 	for (var n = 0; n < max; n++) {
 		var slot = slots[n];
 		//slot.on("select", selected);
@@ -335,7 +319,12 @@ function background() {
 
 
 function addOneHero () {
-	console.log("it is true");
+    console.log("it is true");
+    console.log(typeof(betMoney.text));
+    var a;
+    a = parseInt(betMoney.text);
+    console.log(typeof(a));
+    betMoney.text = a+ 10;
 	// heroBetCounterNumber.text++;
 	// totalBets.text++;
 	// console.log(totalBets.text);
@@ -354,10 +343,3 @@ function addOneHero () {
 	// 	audio_bet.currentTime = 0;
 	// }
 }
-
-
-</script>
-</head>
-<body onload="init();" style="background-color:#FFFFFF">
-</body>
-</html>
