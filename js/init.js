@@ -17,11 +17,12 @@ var totalBalanceMoney;
 var list;
 var checked = 0;
 
-let totalBetMoney = new PIXI.Text(1000, {fontFamily: 'Arial-Bold', fontSize: 36, fill: 0xfffffff, align: 'center'});
-let betMoney = new PIXI.Text(10, {fontFamily: 'Arial-Bold', fontSize: 36, fill: 0xfffffff, align: 'left'});
-totalBetMoney.x = 300;
-betMoney.x = 300;
-betMoney.y = 50;
+let totalBetMoney = new PIXI.Text(1000, {fontFamily: 'Arial-Bold', fontSize: 36, fill: 0xFFFFFF, align: 'center'});
+let betMoney = new PIXI.Text(10, {fontFamily: 'Arial-Bold', fontSize: 36, fill: 0xFFFFFF, align: 'left'});
+totalBetMoney.x = 530;
+totalBetMoney.y = 545;
+betMoney.x = 70;
+betMoney.y = 545;
 
 var sound = new Howl({
     src: ['sound/bgm_main_rockstar.mp3'],
@@ -311,7 +312,7 @@ function setup() {
 	playBtn = new Button(textures_play);
 	front.addChild(playBtn);
 	playBtn.position.x = 270;
-	playBtn.position.y = 480;
+	playBtn.position.y = 460;
 	playBtn.click = playBtn.touchstart = play;
 	// console.log("play btn clicked!");
 
@@ -395,7 +396,7 @@ function addOneHero () {
     var a;
     a = parseInt(betMoney.text);
     console.log(typeof(a));
-    betMoney.text = a+ 10;
+    betMoney.text = a + 10;
 	// heroBetCounterNumber.text++;
 	// totalBets.text++;
 	// console.log(totalBets.text);
