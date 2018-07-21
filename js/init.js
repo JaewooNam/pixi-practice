@@ -275,15 +275,15 @@ function match() {
 //layout
 function setup() {
 	var textures_play = {
-		"btn_up" : PIXI.Texture.fromFrame("start_btn_3.png"), 
-		"btn_over" : PIXI.Texture.fromFrame("start_btn_1.png"), 
-		"btn_selected" : PIXI.Texture.fromFrame("start_btn_1.png"), 
-		"btn_disabled" : PIXI.Texture.fromFrame("start_btn_2.png"), 
+		"btn_up" : PIXI.Texture.fromFrame("start_button_3.png"), 
+		"btn_over" : PIXI.Texture.fromFrame("start_button_1.png"), 
+		"btn_selected" : PIXI.Texture.fromFrame("start_button_4.png"), 
+		"btn_disabled" : PIXI.Texture.fromFrame("start_button_2.png"), 
 	};
 	var textures_stop = {
 		"btn_up" : PIXI.Texture.fromFrame("stop_btn_3.png"), 
 		"btn_over" : PIXI.Texture.fromFrame("stop_btn_1.png"), 
-		"btn_selected" : PIXI.Texture.fromFrame("stop_btn_1.png"), 
+		"btn_selected" : PIXI.Texture.fromFrame("stop_btn_4.png"), 
 		"btn_disabled" : PIXI.Texture.fromFrame("stop_btn_2.png")
 	};
 
@@ -317,20 +317,8 @@ function setup() {
 
 
 	// Set bet status pannel
-	let bet = PIXI.Sprite.fromImage('images/bet.png');
-	bet.x = 50;
-	bet.y = 510;
-	bet.width = 100;
-	bet.height = 70;
-	front.addChild(bet);
 
 	// Set balance pannel
-	let balanceStatus = PIXI.Sprite.fromImage('images/balance.png');
-	balanceStatus.x = 500;
-	balanceStatus.y = 10;
-	balanceStatus.width = 100;
-	balanceStatus.height = 60;
-	front.addChild(balanceStatus);
 
 	// Set Plus, Minus Buttons
 	let plusBtn = PIXI.Sprite.fromImage('images/add_btn_on.png');
