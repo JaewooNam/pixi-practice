@@ -1,5 +1,6 @@
-## Sushi-slot
-#### If doesn't work on Chrome,Safari, Please use FireFox.
+### Sushi Slot
+* If doesn't work on Chrome,Safari, Please use FireFox.
+* This is my first PixiJS Practice.
 
 ### Demos
-* [demo](http://JaewooNam.github.io/practice-slot-machine-pixi/index.html)
+* [Demo](http://JaewooNam.github.io/practice-slot-machine-pixi/index.html)

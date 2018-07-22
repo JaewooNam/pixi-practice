@@ -13,7 +13,6 @@ var completed = 0;
 var label;
 var list;
 var checked = 0;
-var myBar;
 
 let totalBetMoney = new PIXI.Text(1000, {fontFamily: 'Arial-Bold', fontSize: 30, fill: 0xFFFFFF, align: 'center'});
 let betMoney = new PIXI.Text(10, {fontFamily: 'Arial-Bold', fontSize: 30, fill: 0xFFFFFF, align: 'left'});
@@ -163,7 +162,6 @@ function initialize() {
 }
 
 function play(data) {
-    clearTimeout(myBar);
     startSound.play();
     playBtn.selected(true);
     if (totalBetMoney.text - betMoney.text >= 0 && betMoney.text > 0) {
@@ -254,19 +252,11 @@ winText.position.y = 200;
 winText.visible = false;
 front.addChild(winText);
 
-function myFunction() {
-    
-}
-
-function myStopFunction() {
-    clearInterval(this.myBar);
-    front.removeChild(winText);
-}
-
 function match() {
     var parsedTotalBetMoney;
     var parsedBetMoney;
     var matchingBonus;
+
     winText.visible = false;
 
     // var spinningText = new PIXI.Text("BIG WIN!!", {
@@ -278,11 +268,11 @@ function match() {
     //     stroke: '#FFFFFF',
     //     strokeThickness: 6
     // });
+    parsedTotalBetMoney = parseInt(totalBetMoney.text);
+    parsedBetMoney = parseInt(betMoney.text);
 
 	if ((list[0] == list[1]) && (list[0] == list[2])) {
         // JackPot
-        parsedTotalBetMoney = parseInt(totalBetMoney.text);
-        parsedBetMoney = parseInt(betMoney.text);
         matchingBonus = parsedBetMoney * 10;
 
         if (list[0] == 3) {
@@ -295,7 +285,9 @@ function match() {
         
     } else {
         winText.visible = false;
-        
+        if (betMoney.text >= totalBetMoney.text) {
+            betMoney.text = totalBetMoney.text;
+        }
         // parsedTotalBetMoney = parseInt(totalBetMoney.text);
         // parsedBetMoney = parseInt(betMoney.text);
         // matchingBonus = parsedBetMoney * 10;
@@ -491,14 +483,26 @@ function plusCoin() {
 }
 
 function minusCoin() {
-    console.log("it is true");
     var tempBetMoney;
-    a = parseInt(betMoney.text);
-    if (betMoney.text <= 10) {
+    var preDigit;
+    var currentDigit;
+
+    tempBetMoney = parseInt(betMoney.text);
+    if (tempBetMoney <= 10) {
         playBtn.enabled(true);
         return;
     }
 
-    betMoney.text = a - 10;
+    var num = tempBetMoney;
+    num = num.toString();
+    preDigit = num.length;
+
+    var num2 = tempBetMoney - 10;
+    num2 = num2.toString();
+    currentDigit = num2.length;
+    if (currentDigit < preDigit) {
+        plusBtn.x -= currentDigit * 5;
+    }
+    betMoney.text = tempBetMoney - 10;
     minusCoinSound.play();
 }
