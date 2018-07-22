@@ -9,7 +9,7 @@ SlotIcon = (function() {
 		this.init(n, r);
 	}
 
-	// Containerクラス継承
+	// Inherit Container class
 	SlotIcon.prototype = Object.create(PIXI.Container.prototype, {
 		constructor : {value : SlotIcon}
 	});
