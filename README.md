@@ -1,5 +1,4 @@
 ### Sushi Slot
-* If doesn't work on Chrome,Safari, Please use FireFox.
 * This is my first PixiJS Practice.
 
 ### Demos

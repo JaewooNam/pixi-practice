@@ -1,6 +1,5 @@
 Slot = (function() {
-
-	var deceleration = 0.24;
+	var deceleration = 0.23;
 
 	function Slot(n, w, h, s, r) {
 		PIXI.Container.apply(this, arguments);
@@ -8,7 +7,7 @@ Slot = (function() {
 		this.init(n, w, h, s, r);
 	}
 
-	// Inberit Container class
+	// Inherit Container class
 	Slot.prototype = Object.create(PIXI.Container.prototype, {
 		constructor : {value : Slot}
 	});
@@ -53,12 +52,6 @@ Slot = (function() {
 		mask.drawRect(-this.bw, this.bh, this.bw*2, this.bh);
 		mask.endFill();
 		this.addChild(mask);
-		//mask.beginFill(0x000000);
-		//mask.drawRect(-this.bw, -this.bh, this.bw*2, this.bh*2);
-		//mask.endFill();
-		//this.addChild(mask);
-		//container.mask = mask;
-
 		this.interactive = false;
 	};
 
@@ -88,7 +81,6 @@ Slot = (function() {
 	};
 
 	Slot.prototype.stop = function() {
-		//スローダウン開始
 		this.scrolling = false;
 		this.catchup();
 	};
@@ -137,7 +129,6 @@ Slot = (function() {
 		var gid = this.guide.pid;
 		for (var n = 0; n < this.max; n++) {
 			var icon = this.icons[n];
-			//icon.angle = icon.angle >> 0;
 			icon.angle = icon.tangle = 360 - this.unit*(n - gid);
 			icon.update();
 			icon.move();

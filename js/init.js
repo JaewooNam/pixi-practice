@@ -5,7 +5,7 @@ var bw = 80;
 var bh = 90;
 var max = 3;
 var slots;
-var speed = 8;
+var speed = 10;
 var radius = 360;
 var playBtn, stopBtns;
 var timer;
@@ -13,56 +13,6 @@ var completed = 0;
 var label;
 var list;
 var checked = 0;
-
-let totalBetMoney = new PIXI.Text(1000, {fontFamily: 'Arial-Bold', fontSize: 30, fill: 0xFFFFFF, align: 'center'});
-let betMoney = new PIXI.Text(10, {fontFamily: 'Arial-Bold', fontSize: 30, fill: 0xFFFFFF, align: 'left'});
-
-let plusBtn = PIXI.Sprite.fromImage('images/add_btn_on.png');
-let minusBtn = PIXI.Sprite.fromImage('images/minus_btn_on.png');
-let maxBetting = PIXI.Sprite.fromImage("images/max_bet.png");
-
-// totalBetMoney.x = 530;
-// totalBetMoney.y = 545;
-// betMoney.x = 85;
-// betMoney.y = 545;
-
-var sound = new Howl({
-    // src: ['sound/play_sound.mp3'],
-    src: ['sound/bgm_main_rockstar.mp3'],
-    volume: 0.3,
-    display: false,
-});
-sound.play();
-
-var sound2 = new Howl({
-    src: ['sound/bgm_lobby.mp3'],
-    volume: 0.4
-});
-
-var stopSound = new Howl({
-    src: ['sound/ui_3.mp3'],
-    volume: 0.5
-});
-
-var plusCoinSound = new Howl({
-    src: ['sound/plus_coin.mp3'],
-    volume: 0.5
-});
-
-var minusCoinSound = new Howl({
-    src: ['sound/minus_coin.mp3'],
-    volume: 0.8
-});
-
-var matchedSound = new Howl({
-    src: ['sound/r_medal.mp3'],
-    volume: 0.8
-});
-
-var startSound = new Howl({
-    src: ['sound/Rescue_Blast_Start.mp3'],
-    volume: 0.8
-});
 
 stage = new PIXI.Container();
 renderer = PIXI.autoDetectRenderer(640, 589, {transparent: true, backgroundColor: 0xFFFFFF});
@@ -80,13 +30,57 @@ stage.addChild(container);
 front = new PIXI.Container();
 stage.addChild(front);
 
+let totalBetMoney = new PIXI.Text(1000, {fontFamily: 'Arial-Bold', fontSize: 30, fill: 0xFFFFFF, align: 'center'});
+let betMoney = new PIXI.Text(10, {fontFamily: 'Arial-Bold', fontSize: 30, fill: 0xFFFFFF, align: 'left'});
+let plusBtn = PIXI.Sprite.fromImage('images/add_btn_on.png');
+let minusBtn = PIXI.Sprite.fromImage('images/minus_btn_on.png');
+let maxBetting = PIXI.Sprite.fromImage("images/max_bet.png");
+
+plusBtn.alpha = 0.7;
+minusBtn.alpha = 0.7;
+maxBetting.alpha = 0.7;
+
+console.log("test sound");
+var sound = new Howl({
+    // src: ['sound/play_sound.mp3'],
+    src: ['sound/bgm_main_rockstar.mp3'],
+    volume: 0.3,
+});
+
+sound.play();
+
+var stopSound = new Howl({
+    src: ['sound/ui_3.mp3'],
+    volume: 0.5
+});
+
+var plusCoinSound = new Howl({
+    src: ['sound/plus_coin.mp3'],
+    volume: 0.8
+});
+
+var minusCoinSound = new Howl({
+    src: ['sound/minus_coin.mp3'],
+    volume: 0.8
+});
+
+var matchedSound = new Howl({
+    src: ['sound/r_medal.mp3'],
+    volume: 0.8
+});
+
+var startSound = new Howl({
+    src: ['sound/Rescue_Blast_Start.mp3'],
+    volume: 0.8
+});
+
 // make sound button on/off sprite
 let soundBtnOn = PIXI.Sprite.fromImage('images/volume_up_on.png');
 soundBtnOn.x = 600;
 soundBtnOn.y = 10;
 soundBtnOn.width = 30;
 soundBtnOn.height = 30;
-
+soundBtnOn.alpha = 0.7;
 front.addChild(soundBtnOn);
 soundBtnOn.interactive = true;
 soundBtnOn.buttonMode = true;
@@ -95,8 +89,14 @@ soundBtnOn.on('pointerdown', soundOn);
 let soundBtnOff = PIXI.Sprite.fromImage('images/volume_down_on.png');
 soundBtnOff.x = 600;
 soundBtnOff.y = 10;
+soundBtnOff.alpha = 0.7;
 soundBtnOff.width = 30;
 soundBtnOff.height = 30;
+soundBtnOff.visible = false;
+front.addChild(soundBtnOff);
+soundBtnOff.interactive = true;
+soundBtnOff.buttonMode = true;
+soundBtnOff.on('pointerdown', soundOff);
 
 // Set background image
 var backGroundSprite = PIXI.Sprite.fromImage("images/bg_image.png");
@@ -116,6 +116,49 @@ update();
 
 front.addChild(totalBetMoney);
 front.addChild(betMoney);
+
+plusBtn.mouseover = function(mouseData) {
+    this.alpha = 1;
+}
+
+plusBtn.mouseout = function(mouseData) {
+    this.alpha = 0.7;
+}
+
+minusBtn.mouseover = function(mouseData) {
+    this.alpha = 1;
+}
+
+minusBtn.mouseout = function(mouseData) {
+    this.alpha = 0.7;
+}
+
+maxBetting.mouseover = function(mouseData) {
+    this.alpha = 1;
+}
+    
+maxBetting.mouseout = function(mouseData) {
+    this.alpha = 0.7;
+}
+
+soundBtnOff.mouseover = function(mouseData) {
+    this.alpha = 1;
+}
+    
+soundBtnOff.mouseout = function(mouseData) {
+    this.alpha = 0.7;
+}
+
+soundBtnOn.mouseover = function(mouseData) {
+    this.alpha = 1;
+}    
+
+soundBtnOn.mouseout = function(mouseData) {
+    this.alpha = 0.7;
+}
+
+// start animating
+animate();
 
 function update() {
 	renderer.render(stage);
@@ -167,6 +210,7 @@ function play(data) {
     if (totalBetMoney.text - betMoney.text >= 0 && betMoney.text > 0) {
         totalBetMoney.text = totalBetMoney.text - betMoney.text;
     } else {
+        errorMessage.visible = true;
         playBtn.enabled(true);
         return;
     }
@@ -252,27 +296,31 @@ winText.position.y = 200;
 winText.visible = false;
 front.addChild(winText);
 
+let errorMessage = new PIXI.Text("Not Enough Balance", {
+    fontWeight: 'bold',
+    fontSize: 40,
+    fontFamily: 'Arial',
+    fill: '#db1313',
+    align: 'left',
+    stroke: '#FFFFFF',
+    strokeThickness: 6
+});
+
+errorMessage.position.x = 100;
+errorMessage.position.y = 400;
+errorMessage.visible = false;
+stage.addChild(errorMessage);
+
 function match() {
     var parsedTotalBetMoney;
     var parsedBetMoney;
     var matchingBonus;
 
     winText.visible = false;
-
-    // var spinningText = new PIXI.Text("BIG WIN!!", {
-    //     fontWeight: 'bold',
-    //     fontSize: 60,
-    //     fontFamily: 'Arial',
-    //     fill: '#cc00ff',
-    //     align: 'center',
-    //     stroke: '#FFFFFF',
-    //     strokeThickness: 6
-    // });
     parsedTotalBetMoney = parseInt(totalBetMoney.text);
     parsedBetMoney = parseInt(betMoney.text);
 
 	if ((list[0] == list[1]) && (list[0] == list[2])) {
-        // JackPot
         matchingBonus = parsedBetMoney * 10;
 
         if (list[0] == 3) {
@@ -282,10 +330,14 @@ function match() {
         totalBetMoney.text = parsedTotalBetMoney + matchingBonus;
         matchedSound.play();
         winText.visible = true;
-        
     } else {
         winText.visible = false;
         if (betMoney.text >= totalBetMoney.text) {
+            if (parseInt(totalBetMoney.text) == 0) {
+                plusBtn.x = 130;
+                betMoney.text = 10;
+                return;
+            }
             betMoney.text = totalBetMoney.text;
         }
         // parsedTotalBetMoney = parseInt(totalBetMoney.text);
@@ -341,11 +393,14 @@ function setup() {
 	front.addChild(minusBtn);
 	minusBtn.interactive = true;
     minusBtn.buttonMode = true;
+    minusBtn.on('pointerdown', minusCoin);
 
     betMoney.x = minusBtn.x + 50;
     betMoney.y = minusBtn.y;
 
-    plusBtn.x = betMoney.x + 45;
+    plusBtn.x = betMoney.x + (betMoney.x - minusBtn.x);
+    // 130
+    console.log("init plustBtn.x = ", plusBtn.x);
 	plusBtn.y = minusBtn.y;
 	plusBtn.width = 30;
 	plusBtn.height = 30;
@@ -366,54 +421,58 @@ function setup() {
     totalBetMoney.x = 530;
     totalBetMoney.y = betMoney.y;
 
-    var ccc = parseInt(betMoney.text);
-    if (ccc < 10) {
-        minusBtn.enabled(true);
-        return;
-    }
-
-    minusBtn.on('pointerdown', minusCoin);
     // sound button
 }
 
 function setMaxBetMoney() {
+    console.log("maxbetfunc 1= ",betMoney.text);
     var tempBetMoney;
     var tempTotalBetMoney;
     var preDigit;
     var currentDigit;
 
     tempBetMoney = parseInt(betMoney.text);
+    console.log("maxbetfunc 2= ", tempBetMoney);
     tempTotalBetMoney = parseInt(totalBetMoney.text);
-    var num = tempBetMoney;
-    num = num.toString();
-    preDigit = num.length;
 
-    var num2 = tempTotalBetMoney;
-    num2 = num2.toString();
-    currentDigit = num2.length;
-    if (currentDigit > preDigit) {
-        plusBtn.x += currentDigit * 10;
-    }
+    resizePlustButton(tempTotalBetMoney);
+    // var num = tempBetMoney;
+    // num = num.toString();
+    // preDigit = num.length;
+
+    // var num2 = tempTotalBetMoney;
+    // num2 = num2.toString();
+    // currentDigit = num2.length;
+    // console.log("max1 = ", num);
+    // console.log("max2 = ", num2);
+    // console.log("currentDigit max f = ", currentDigit);
+    // if (currentDigit > preDigit) {
+    //     console.log("max width ", plusBtn.x);
+    //     if (plusBtn.x >= 160) {
+    //         plusBtn.x = 130;
+    //         return;
+    //     }
+    //     if (plusBtn.x >= 130) {
+    //         plusBtn.x += 20;
+    //     }
+    // }
 
     betMoney.text = tempTotalBetMoney;
     plusCoinSound.play();
 }
 
 function soundOn() {
-    // console.log("(on) sound vol = ", sound.volume.);
-    front.removeChild(soundBtnOn);
-    front.addChild(soundBtnOff);
+    soundBtnOn.visible = false;
+    soundBtnOff.visible = true;
     soundBtnOff.interactive = true;
     soundBtnOff.buttonMode = true;
     soundBtnOff.on('pointerdown', soundOff);
     sound.pause();
 }
 
-// This functiond play sound
 function soundOff() {
-    // console.log("(off) sound vol = ", sound.volume);
-    front.removeChild(soundBtnOff);
-    front.addChild(soundBtnOn);
+    soundBtnOff.visible = false;
+    soundBtnOn.visible = true;
     sound.play();
 }
 
@@ -450,59 +509,47 @@ function background() {
     
     richText.position.x = 4;
 	richText.position.y = 0;
-	richText.alpha = 0.6;
+	richText.alpha = 0.5;
 }
-
 
 function plusCoin() {
     var tempBetMoney;
     var tempTotalBetMoney;
-    var preDigit;
-    var currentDigit;
-
-    tempBetMoney = parseInt(betMoney.text);
+    tempBetMoney = parseInt(betMoney.text) + 10;
+    console.log("plus btn clicked, ",tempBetMoney);
     tempTotalBetMoney = parseInt(totalBetMoney.text);
-    if (tempBetMoney + 10 > tempTotalBetMoney) {
+    if (tempBetMoney > tempTotalBetMoney) {
         plusBtn.enabled(true);
         return;
     }
 
-    var num = tempBetMoney;
-    num = num.toString();
-    preDigit = num.length;
-
-    var num2 = tempBetMoney + 10;
-    num2 = num2.toString();
-    currentDigit = num2.length;
-    if (currentDigit > preDigit) {
-        plusBtn.x += preDigit * 5;
-    }
-
-    betMoney.text = tempBetMoney + 10;
+    resizePlustButton(tempBetMoney);
+    betMoney.text = tempBetMoney;
     plusCoinSound.play();
 }
 
 function minusCoin() {
     var tempBetMoney;
-    var preDigit;
-    var currentDigit;
-
-    tempBetMoney = parseInt(betMoney.text);
-    if (tempBetMoney <= 10) {
-        playBtn.enabled(true);
+    tempBetMoney = parseInt(betMoney.text) - 10;
+    if (tempBetMoney <= 0) {
+        minusBtn.enabled(true);
         return;
     }
 
-    var num = tempBetMoney;
-    num = num.toString();
-    preDigit = num.length;
-
-    var num2 = tempBetMoney - 10;
-    num2 = num2.toString();
-    currentDigit = num2.length;
-    if (currentDigit < preDigit) {
-        plusBtn.x -= currentDigit * 5;
-    }
-    betMoney.text = tempBetMoney - 10;
+    resizePlustButton(tempBetMoney);
+    betMoney.text = tempBetMoney;
     minusCoinSound.play();
 }
+
+function resizePlustButton(currentBetMoney) {
+    var num;
+    num = currentBetMoney.toString();
+    currentDigit = num.length;
+    plusBtn.x = 130 + ((currentDigit - 2) * 10); 
+}
+
+function animate() {
+    requestAnimationFrame(animate);
+    // render the root container
+    renderer.render(stage);
+};
