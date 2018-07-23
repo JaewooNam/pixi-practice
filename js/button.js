@@ -6,7 +6,7 @@ Button = (function() {
 		this.init(textures);
 	}
 
-	// Containerクラス継承
+	// Inherit Container class
 	Button.prototype = Object.create(PIXI.Container.prototype, {
 		constructor : {value : Button}
 	});

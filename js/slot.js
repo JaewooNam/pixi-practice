@@ -147,30 +147,11 @@ Slot = (function() {
 			}
 		}
 
-		// console.log("list[0].pid ", list[1].pid);
-		// console.log("list[1].pid = ", list[2].pid);
-		// console.log("list[2].pid = ", list[3].pid);
 		var pid = list[list.length - 1].pid;
-	
-		// if ((clickCount % 3 == 1) && (window.countPlay % 3 == 0)) {
-		// 	console.log("count = ", window.countPlay);
-		// 	console.log("random value = ", Math.floor((Math.random() * 7)+1))
-		// 	pid = Math.floor((Math.random() * 7)+1);
-		// }
-		// pid = window.jackPotPid;
-		// console.log(pid);
-		console.log("window.countPlay = ", window.countPlay);
-		console.log("window.jackPotCountNumber = ", window.jackPotCountNumber);
+		// Set probability to get JackPot at least once, in 1~20 times randomly.
 		if (window.countPlay == window.jackPotCountNumber) {
 			pid = window.jackPotPid;
 		}
-		// pid =  Math.floor(Math.random() * Math.floor(7)) + 1;
-		// console.log("pid -= ".pid);
-		// if (window.countPlay % 3 == 0) {
-		// 	console.log("JackPot logic");
-		// 	pid = Math.floor((Math.random() * 7)+1);
-		// 	console.log("pid = ", pid);
-		// }
 		
 		this.guide = this.icons[pid];
 		var offset = 360 - (this.guide.angle + 360)%360;

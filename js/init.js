@@ -16,12 +16,17 @@ var checked = 0;
 var countPlay = 0;
 var jackPotPid = Math.floor(Math.random() * Math.floor(7)) + 1;
 var jackPotCountNumber = Math.floor(Math.random() * Math.floor(20)) + 1;
+var isJackPotStatus = false;
+let ticker = PIXI.ticker.shared;
+var app = new PIXI.Application();
+ticker.autoStart = false;
+let stuffContainer = new PIXI.Container();
 
 stage = new PIXI.Container();
 renderer = PIXI.autoDetectRenderer(640, 589, {transparent: true, backgroundColor: 0xFFFFFF});
 document.body.appendChild(renderer.view);
 renderer.view.style.display = "block";
-renderer.view.style.width = "1500";
+renderer.view.style.width = "640";
 renderer.view.style.marginTop = "40px";
 renderer.view.style.marginLeft = "auto";
 renderer.view.style.marginRight = "auto";
@@ -43,9 +48,7 @@ plusBtn.alpha = 0.7;
 minusBtn.alpha = 0.7;
 maxBetting.alpha = 0.7;
 
-console.log("test sound");
 var sound = new Howl({
-    // src: ['sound/play_sound.mp3'],
     src: ['sound/main_bgm.mp3'],
     volume: 0.3,
 });
@@ -74,6 +77,11 @@ var matchedSound = new Howl({
 
 var startSound = new Howl({
     src: ['sound/start_bgm.mp3'],
+    volume: 0.8
+});
+
+var matchedSound2 = new Howl({
+    src: ['sound/r_score.mp3'],
     volume: 0.8
 });
 
@@ -111,7 +119,6 @@ background();
 loader = new PIXI.loaders.Loader();
 loader.add("icons", "images/sushi_reel.json");
 loader.add("button", "images/button_images.json");
-loader.add("button2", "images/bet_images.json")
 loader.on("complete", complete);
 loader.load();
 
@@ -186,7 +193,7 @@ function initialize() {
 	icons.push(PIXI.Texture.fromFrame("sushi_04.png"));
 	icons.push(PIXI.Texture.fromFrame("sushi_05.png"));
 	icons.push(PIXI.Texture.fromFrame("sushi_06.png"));
-	icons.push(PIXI.Texture.fromFrame("sushi_07.png"));
+    icons.push(PIXI.Texture.fromFrame("sushi_07.png"));
 
 	slots = [];
 	for (var n = 0; n < max; n++) { 
@@ -204,16 +211,17 @@ function initialize() {
 		content.addChild(slot);
 		slot.setup(icons);
 		slots.push(slot);
-	}
+    }
 }
 
 function play(data) {
     countPlay++;
-    console.log("jackPotCountNumber = ", jackPotCountNumber);
-    //jackPotPid = Math.floor(Math.random() * Math.floor(7)) + 1;
+    if (isJackPotStatus == true) {
+        stage.removeChild(stuffContainer);
+    }
+
     if (countPlay == jackPotCountNumber) {
         jackPotPid = Math.floor(Math.random() * Math.floor(7)) + 1;
-        // jackPotCountNumber = Math.floor(Math.random() * Math.floor(7)) + 1;
     }
 
     startSound.play();
@@ -290,7 +298,7 @@ function clear() {
 
 let winText = new PIXI.Text("WIN!!", {
     fontWeight: 'bold',
-    fontSize: 60,
+    fontSize: 65,
     fontFamily: 'Arial',
     fill: '#ff00cb',
     align: 'center',
@@ -301,7 +309,7 @@ let winText = new PIXI.Text("WIN!!", {
 winText.position.x = 200;
 winText.position.y = 200;
 winText.visible = false;
-front.addChild(winText);
+stage.addChild(winText);
 
 let errorMessage = new PIXI.Text("Not Enough Balance", {
     fontWeight: 'bold',
@@ -323,11 +331,11 @@ function match() {
     var parsedBetMoney;
     var matchingBonus;
 
-    winText.visible = false;
     parsedTotalBetMoney = parseInt(totalBetMoney.text);
     parsedBetMoney = parseInt(betMoney.text);
 
 	if ((list[0] == list[1]) && (list[0] == list[2])) {
+        animateJackPot();
         if (countPlay == jackPotCountNumber) {
             jackPotCountNumber = Math.floor(Math.random() * Math.floor(20)) + 1;
             countPlay = 0;
@@ -340,9 +348,10 @@ function match() {
 
         totalBetMoney.text = parsedTotalBetMoney + matchingBonus;
         matchedSound.play();
+        matchedSound2.play();
         winText.visible = true;
     } else {
-        winText.visible = false;
+        winText.visible = false;        
         if (betMoney.text >= totalBetMoney.text) {
             if (parseInt(totalBetMoney.text) == 0) {
                 plusBtn.x = 130;
@@ -400,8 +409,6 @@ function setup() {
     betMoney.y = minusBtn.y;
 
     plusBtn.x = betMoney.x + (betMoney.x - minusBtn.x);
-    // 130
-    console.log("init plustBtn.x = ", plusBtn.x);
 	plusBtn.y = minusBtn.y;
 	plusBtn.width = 30;
 	plusBtn.height = 30;
@@ -409,7 +416,6 @@ function setup() {
 	plusBtn.interactive = true;
     plusBtn.buttonMode = true;
     plusBtn.on('pointerdown', plusCoin);
-
 
     maxBetting.x = 130;
 	maxBetting.y = 514;
@@ -424,12 +430,8 @@ function setup() {
 }
 
 function setMaxBetMoney() {
-    console.log("maxbetfunc 1= ",betMoney.text);
-    var tempBetMoney;
     var tempTotalBetMoney;
-
-    tempBetMoney = parseInt(betMoney.text);
-    console.log("maxbetfunc 2= ", tempBetMoney);
+    
     tempTotalBetMoney = parseInt(totalBetMoney.text);
     resizePlustButton(tempTotalBetMoney);
     betMoney.text = tempTotalBetMoney;
@@ -491,7 +493,6 @@ function plusCoin() {
     var tempBetMoney;
     var tempTotalBetMoney;
     tempBetMoney = parseInt(betMoney.text) + 10;
-    console.log("plus btn clicked, ",tempBetMoney);
     tempTotalBetMoney = parseInt(totalBetMoney.text);
     if (tempBetMoney > tempTotalBetMoney) {
         plusBtn.enabled(true);
@@ -528,3 +529,64 @@ function animate() {
     // render the root container
     renderer.render(stage);
 };
+
+function animateJackPot() {
+    isJackPotStatus = true;
+    stuffContainer.x = 640;
+    stuffContainer.y = 589;
+
+    stage.addChild(stuffContainer);
+    var fruits = [
+        'images/spinObj_01.png',
+        'images/spinObj_02.png',
+        'images/spinObj_03.png',
+        'images/spinObj_04.png',
+        'images/spinObj_05.png',
+        'images/spinObj_06.png',
+        'images/spinObj_07.png',
+        'images/spinObj_08.png'
+    ];
+
+    var items = [];
+    for (var i = 1; i < 9; i++) {
+        var item = PIXI.Sprite.fromImage(fruits[i % fruits.length]);
+        if (i == 1) {
+            item.x = -600;
+            item.y = -300;
+        } else if (i == 2) {
+            item.x = -500;
+            item.y = -100;
+        } else if (i == 3) {
+            item.x = -100;
+            item.y = -300;            
+        } else if (i == 4) {
+            item.x = -500;
+            item.y = -400;
+        } else if (i == 5) {
+            item.x = -140;
+            item.y = -400;
+        } else if (i == 6) {
+            item.x = -160;
+            item.y = -100;
+        } else if (i == 7) {
+            item.x = -180;
+            item.y = -700;
+        } else if (i == 8) {
+            item.x = -200;
+            item.y = -200;
+        }
+
+        item.anchor.set(0.5);
+        stuffContainer.addChild(item);
+        items.push(item);
+    }
+    
+    ticker.add(function() {
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            item.rotation += 0.2;
+        }
+    
+        renderer.render(stuffContainer, false);
+    });
+}
