@@ -13,6 +13,9 @@ var completed = 0;
 var label;
 var list;
 var checked = 0;
+var countPlay = 0;
+var jackPotPid = Math.floor(Math.random() * Math.floor(7)) + 1;
+var jackPotCountNumber = Math.floor(Math.random() * Math.floor(20)) + 1;
 
 stage = new PIXI.Container();
 renderer = PIXI.autoDetectRenderer(640, 589, {transparent: true, backgroundColor: 0xFFFFFF});
@@ -43,7 +46,7 @@ maxBetting.alpha = 0.7;
 console.log("test sound");
 var sound = new Howl({
     // src: ['sound/play_sound.mp3'],
-    src: ['sound/bgm_main_rockstar.mp3'],
+    src: ['sound/main_bgm.mp3'],
     volume: 0.3,
 });
 
@@ -70,7 +73,7 @@ var matchedSound = new Howl({
 });
 
 var startSound = new Howl({
-    src: ['sound/Rescue_Blast_Start.mp3'],
+    src: ['sound/start_bgm.mp3'],
     volume: 0.8
 });
 
@@ -205,9 +208,17 @@ function initialize() {
 }
 
 function play(data) {
+    countPlay++;
+    console.log("jackPotCountNumber = ", jackPotCountNumber);
+    //jackPotPid = Math.floor(Math.random() * Math.floor(7)) + 1;
+    if (countPlay == jackPotCountNumber) {
+        jackPotPid = Math.floor(Math.random() * Math.floor(7)) + 1;
+        // jackPotCountNumber = Math.floor(Math.random() * Math.floor(7)) + 1;
+    }
+
     startSound.play();
     playBtn.selected(true);
-    if (totalBetMoney.text - betMoney.text >= 0 && betMoney.text > 0) {
+    if ((totalBetMoney.text - betMoney.text >= 0) && betMoney.text > 0) {
         totalBetMoney.text = totalBetMoney.text - betMoney.text;
     } else {
         errorMessage.visible = true;
@@ -224,15 +235,14 @@ function play(data) {
 }
 
 function start() {
-    
 	for (var n = 0; n < max; n++) {
 		var slot = slots[n];
 		slot.once("select", selected);
 		slot.once("complete", scrolled);
 		slot.start();
-	}
+    }
+    
 	timer = setInterval(tick, 16);
-
 	completed = 0;
 	label.text = "";
 	list = [];
@@ -243,7 +253,6 @@ function stop(data) {
 	var id = data.target.id;
     var stopBtn = stopBtns[id];
     var slot = slots[id];
-
 	stopBtn.selected(true);
     stopSound.play();
 	slot.stop();
@@ -257,14 +266,12 @@ function tick() {
 }
 
 function selected(event) {
-	//event.off("select", selected);
 	list[event.sid] = event.gid;
 	checked ++;
 	if (checked > max - 1) match();
 }
 
 function scrolled(event) {
-	//event.off("complete", scrolled);
 	completed++;
 	if (completed > max - 1) {
 		clearInterval(timer);
@@ -321,10 +328,14 @@ function match() {
     parsedBetMoney = parseInt(betMoney.text);
 
 	if ((list[0] == list[1]) && (list[0] == list[2])) {
-        matchingBonus = parsedBetMoney * 10;
+        if (countPlay == jackPotCountNumber) {
+            jackPotCountNumber = Math.floor(Math.random() * Math.floor(20)) + 1;
+            countPlay = 0;
+        }
 
+        matchingBonus = parsedBetMoney * 20;
         if (list[0] == 3) {
-            matchingBonus = parsedBetMoney * 20;
+            matchingBonus = parsedBetMoney * 50;
         }
 
         totalBetMoney.text = parsedTotalBetMoney + matchingBonus;
@@ -340,17 +351,7 @@ function match() {
             }
             betMoney.text = totalBetMoney.text;
         }
-        // parsedTotalBetMoney = parseInt(totalBetMoney.text);
-        // parsedBetMoney = parseInt(betMoney.text);
-        // matchingBonus = parsedBetMoney * 10;
-        // totalBetMoney.text = parsedTotalBetMoney + matchingBonus;
-        // front.addChild(spinningText);
-
-        // spinningText.marginLeft = 1000;
-        // spinningText.position.y = 300;
     }
-    
-//    sound.stop();
 }
 
 function setup() {
@@ -420,43 +421,17 @@ function setup() {
 
     totalBetMoney.x = 530;
     totalBetMoney.y = betMoney.y;
-
-    // sound button
 }
 
 function setMaxBetMoney() {
     console.log("maxbetfunc 1= ",betMoney.text);
     var tempBetMoney;
     var tempTotalBetMoney;
-    var preDigit;
-    var currentDigit;
 
     tempBetMoney = parseInt(betMoney.text);
     console.log("maxbetfunc 2= ", tempBetMoney);
     tempTotalBetMoney = parseInt(totalBetMoney.text);
-
     resizePlustButton(tempTotalBetMoney);
-    // var num = tempBetMoney;
-    // num = num.toString();
-    // preDigit = num.length;
-
-    // var num2 = tempTotalBetMoney;
-    // num2 = num2.toString();
-    // currentDigit = num2.length;
-    // console.log("max1 = ", num);
-    // console.log("max2 = ", num2);
-    // console.log("currentDigit max f = ", currentDigit);
-    // if (currentDigit > preDigit) {
-    //     console.log("max width ", plusBtn.x);
-    //     if (plusBtn.x >= 160) {
-    //         plusBtn.x = 130;
-    //         return;
-    //     }
-    //     if (plusBtn.x >= 130) {
-    //         plusBtn.x += 20;
-    //     }
-    // }
-
     betMoney.text = tempTotalBetMoney;
     plusCoinSound.play();
 }
