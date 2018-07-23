@@ -227,6 +227,7 @@ function play(data) {
     startSound.play();
     playBtn.selected(true);
     if ((totalBetMoney.text - betMoney.text >= 0) && betMoney.text > 0) {
+        console.log("4");
         totalBetMoney.text = totalBetMoney.text - betMoney.text;
     } else {
         errorMessage.visible = true;
@@ -352,12 +353,13 @@ function match() {
         winText.visible = true;
     } else {
         winText.visible = false;        
-        if (betMoney.text >= totalBetMoney.text) {
+        if (parseInt(betMoney.text) >= parseInt(totalBetMoney.text)) {
             if (parseInt(totalBetMoney.text) == 0) {
                 plusBtn.x = 130;
                 betMoney.text = 10;
                 return;
             }
+            console.log("1");
             betMoney.text = totalBetMoney.text;
         }
     }
@@ -434,6 +436,7 @@ function setMaxBetMoney() {
     
     tempTotalBetMoney = parseInt(totalBetMoney.text);
     resizePlustButton(tempTotalBetMoney);
+    console.log("2");
     betMoney.text = tempTotalBetMoney;
     plusCoinSound.play();
 }
@@ -500,6 +503,7 @@ function plusCoin() {
     }
 
     resizePlustButton(tempBetMoney);
+    console.log("3");
     betMoney.text = tempBetMoney;
     plusCoinSound.play();
 }
@@ -513,6 +517,7 @@ function minusCoin() {
     }
 
     resizePlustButton(tempBetMoney);
+    console.log("4");
     betMoney.text = tempBetMoney;
     minusCoinSound.play();
 }
@@ -522,6 +527,11 @@ function resizePlustButton(currentBetMoney) {
     num = currentBetMoney.toString();
     currentDigit = num.length;
     plusBtn.x = 130 + ((currentDigit - 2) * 10); 
+
+    if (currentBetMoney >= 5) {
+        totalBetMoney.text.fontSize = 20;
+        betMoney.text.fontSize = 20;
+    }
 }
 
 function animate() {
