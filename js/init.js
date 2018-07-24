@@ -10,11 +10,13 @@ var radius = 360;
 var playBtn, stopBtns;
 var timer;
 var completed = 0;
-var label;
 var list;
 var checked = 0;
 var countPlay = 0;
+
+// Set randomly image's id if it is a jackpot timing (1 ~ 7)
 var jackPotPid = Math.floor(Math.random() * Math.floor(7)) + 1;
+// Set jackpot count number randomly 1 to 20
 var jackPotCountNumber = Math.floor(Math.random() * Math.floor(20)) + 1;
 var isJackPotStatus = false;
 let ticker = PIXI.ticker.shared;
@@ -181,11 +183,6 @@ function complete() {
 }
 
 function initialize() {
-	label = new PIXI.Text("", {"font": "24px Arial", "fill": "#666666", "align": "center"});
-	stage.addChild(label);
-	label.position.x = 320;
-	label.position.y = 20;
-
 	var icons = [];
 	icons.push(PIXI.Texture.fromFrame("sushi_01.png"));
 	icons.push(PIXI.Texture.fromFrame("sushi_02.png"));
@@ -227,7 +224,6 @@ function play(data) {
     startSound.play();
     playBtn.selected(true);
     if ((totalBetMoney.text - betMoney.text >= 0) && betMoney.text > 0) {
-        console.log("4");
         totalBetMoney.text = totalBetMoney.text - betMoney.text;
     } else {
         errorMessage.visible = true;
@@ -253,7 +249,6 @@ function start() {
     
 	timer = setInterval(tick, 16);
 	completed = 0;
-	label.text = "";
 	list = [];
 	checked = 0;
 }
@@ -359,8 +354,8 @@ function match() {
                 betMoney.text = 10;
                 return;
             }
-            console.log("1");
-            betMoney.text = totalBetMoney.text;
+
+            betMoney.text = parseInt(totalBetMoney.text);
         }
     }
 }
@@ -436,7 +431,6 @@ function setMaxBetMoney() {
     
     tempTotalBetMoney = parseInt(totalBetMoney.text);
     resizePlustButton(tempTotalBetMoney);
-    console.log("2");
     betMoney.text = tempTotalBetMoney;
     plusCoinSound.play();
 }
@@ -503,7 +497,6 @@ function plusCoin() {
     }
 
     resizePlustButton(tempBetMoney);
-    console.log("3");
     betMoney.text = tempBetMoney;
     plusCoinSound.play();
 }
@@ -517,7 +510,6 @@ function minusCoin() {
     }
 
     resizePlustButton(tempBetMoney);
-    console.log("4");
     betMoney.text = tempBetMoney;
     minusCoinSound.play();
 }
