@@ -1,6 +1,3 @@
-# Test Branch
-Interview Question -> Please go to test-code branch
-
 # Description
 This is my first PixiJS practice and I has developed a simple slot machine game.
 
